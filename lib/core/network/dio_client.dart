@@ -10,7 +10,7 @@ class DioClient {
   static final instance = DioClient._();
 
   final Dio _dio = Dio(BaseOptions(
-      baseUrl: "https://449267d2-8733-41dd-a4c7-0f784f44ef15.mock.pstmn.io",
+      baseUrl: "https://e52605eb-dae7-4350-a97b-e48023ac1753.mock.pstmn.io",
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60),
       responseType: ResponseType.json));
@@ -32,7 +32,7 @@ class DioClient {
       );
 
       if (response.statusCode == 200) {
-        return response.data;
+        return json.decode(response.data);
       }
       throw "something went wrong";
     } catch (e) {
@@ -70,15 +70,16 @@ class DioClient {
   }
 
   ///Put Method
-  Future<Map<String, dynamic>> patch(String path,
+  Future<Map<String, dynamic>> put(
       {data,
+      required String path,
       Map<String, dynamic>? queryParameters,
       Options? options,
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress}) async {
     try {
-      final Response response = await _dio.patch(
+      final Response response = await _dio.put(
         path,
         data: data,
         queryParameters: queryParameters,
@@ -88,7 +89,7 @@ class DioClient {
         onReceiveProgress: onReceiveProgress,
       );
       if (response.statusCode == 200) {
-        return response.data;
+        return json.decode(response.data);
       }
       throw "something went wrong";
     } catch (e) {

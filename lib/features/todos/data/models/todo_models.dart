@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:todo_list_test/features/todos/data/models/todo.dart';
+
 class TodosModel {
   TodosModel({
     required this.status,
@@ -7,7 +10,7 @@ class TodosModel {
 
   final String? status;
   final int? code;
-  final List<Datum> data;
+  final List<Todo> data;
 
   factory TodosModel.fromJson(Map<String, dynamic> json) {
     return TodosModel(
@@ -15,7 +18,7 @@ class TodosModel {
       code: json["code"],
       data: json["data"] == null
           ? []
-          : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+          : List<Todo>.from(json["data"]!.map((x) => Todo.fromJson(x))),
     );
   }
 
@@ -23,31 +26,5 @@ class TodosModel {
         "status": status,
         "code": code,
         "data": data.map((x) => x.toJson()).toList(),
-      };
-}
-
-class Datum {
-  Datum({
-    required this.title,
-    required this.subtitle,
-    required this.completed,
-  });
-
-  final String? title;
-  final String? subtitle;
-  final bool? completed;
-
-  factory Datum.fromJson(Map<String, dynamic> json) {
-    return Datum(
-      title: json["title"],
-      subtitle: json["subtitle"],
-      completed: json["completed"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        "title": title,
-        "subtitle": subtitle,
-        "completed": completed,
       };
 }

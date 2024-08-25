@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todo_list_test/core/widgets/input_field_widget.dart';
 import 'package:todo_list_test/core/widgets/primary_button.dart';
+import 'package:todo_list_test/core/widgets/snackbar.dart';
 import 'package:todo_list_test/core/widgets/text_widget.dart';
+import 'package:todo_list_test/features/todos/bloc/todos_bloc.dart';
+import 'package:todo_list_test/features/todos/data/models/todo.dart';
 
 class EditTodoBottomSheetWidget extends StatefulWidget {
-  const EditTodoBottomSheetWidget({super.key});
-
+  const EditTodoBottomSheetWidget({super.key, required this.todo});
+  final Todo todo;
   @override
   State<EditTodoBottomSheetWidget> createState() =>
       _EditTodoBottomSheetWidgetState();
 }
 
 class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
-  late GlobalKey<FormFieldState> titleKey = GlobalKey<FormFieldState>();
-  late GlobalKey<FormFieldState> detailsKey = GlobalKey<FormFieldState>();
+  late TextEditingController titleController;
+  late TextEditingController subTitleController;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    titleController = TextEditingController(text: widget.todo.title);
+    subTitleController = TextEditingController(text: widget.todo.subtitle);
+
+    super.initState();
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
     return Padding(
       padding:
           const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 20),
@@ -42,7 +56,7 @@ class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
                 hintColor: Theme.of(context).colorScheme.inversePrimary,
                 hintText: "Title",
                 hintSize: 12,
-                key: titleKey,
+                controller: titleController,
                 enabledBorderRadius: 10,
                 onChanged: (val) {}),
             SizedBox(
@@ -52,7 +66,7 @@ class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
                 hintColor: Theme.of(context).colorScheme.inversePrimary,
                 hintText: "Details",
                 hintSize: 12,
-                key: detailsKey,
+                controller: subTitleController,
                 maxLines: 3,
                 enabledBorderRadius: 10,
                 onChanged: (val) {}),
@@ -63,7 +77,21 @@ class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
             PrimaryButton(
                 label: "Edit task",
                 onPressed: () {
-                  // Navigator.pushNamed(context, Routes.createAccount);
+                  if (titleController.text == "" ||
+                      subTitleController.text == "") {
+                    InfoSnackBar.showErrorSnackBar(
+                        context, "Both fields are required");
+                    Navigator.pop(context);
+                  } else {
+                    context.read<TodosBloc>().add(
+                          TodoEventUpdateTodo(
+                            todo: widget.todo.copyWith(
+                                title: titleController.text,
+                                subtitle: subTitleController.text),
+                          ),
+                        );
+                    Navigator.pop(context);
+                  }
                 },
                 isEnabled: true),
           ],

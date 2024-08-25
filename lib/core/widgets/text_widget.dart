@@ -12,6 +12,7 @@ class TextWidget extends StatelessWidget {
       this.textAlign,
       this.overflow,
       this.onTap,
+      this.onLongPress,
       this.textDecoration,
       this.letterSpacing,
       this.fontStyle});
@@ -19,6 +20,8 @@ class TextWidget extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+
   final Color? color;
   final TextAlign? textAlign;
   final TextOverflow? overflow;
@@ -29,6 +32,7 @@ class TextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Text(
         text,
         textAlign: textAlign,

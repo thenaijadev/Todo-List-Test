@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:todo_list_test/core/utils/logger.dart';
 import 'package:todo_list_test/core/widgets/input_field_widget.dart';
 import 'package:todo_list_test/core/widgets/primary_button.dart';
 import 'package:todo_list_test/core/widgets/text_widget.dart';
+import 'package:todo_list_test/features/todos/bloc/todos_bloc.dart';
+import 'package:todo_list_test/features/todos/data/models/todo.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateTodoBottomSheetWidget extends StatefulWidget {
   const CreateTodoBottomSheetWidget({super.key});
@@ -14,8 +19,18 @@ class CreateTodoBottomSheetWidget extends StatefulWidget {
 
 class _CreateTodoBottomSheetWidgetState
     extends State<CreateTodoBottomSheetWidget> {
-  late GlobalKey<FormFieldState> titleKey = GlobalKey<FormFieldState>();
-  late GlobalKey<FormFieldState> detailsKey = GlobalKey<FormFieldState>();
+  late GlobalKey<FormFieldState> titleKey;
+  late GlobalKey<FormFieldState> detailsKey;
+
+  @override
+  void initState() {
+    titleKey = GlobalKey<FormFieldState>();
+    detailsKey = GlobalKey<FormFieldState>();
+    super.initState();
+  }
+
+  String title = "";
+  String subTitle = "";
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +60,11 @@ class _CreateTodoBottomSheetWidgetState
                 hintSize: 12,
                 key: titleKey,
                 enabledBorderRadius: 10,
-                onChanged: (val) {}),
+                onChanged: (val) {
+                  setState(() {
+                    title = val ?? "";
+                  });
+                }),
             SizedBox(
               height: 10.h,
             ),
@@ -56,7 +75,9 @@ class _CreateTodoBottomSheetWidgetState
                 key: detailsKey,
                 maxLines: 3,
                 enabledBorderRadius: 10,
-                onChanged: (val) {}),
+                onChanged: (val) {
+                  subTitle = val ?? "";
+                }),
             SizedBox(
               height: 10.h,
             ),
@@ -64,7 +85,14 @@ class _CreateTodoBottomSheetWidgetState
             PrimaryButton(
                 label: "Create task",
                 onPressed: () {
-                  // Navigator.pushNamed(context, Routes.createAccount);
+                  logger.e([title, subTitle]);
+                  context.read<TodosBloc>().add(TodoEventCreateTodo(
+                      todo: Todo(
+                          id: const Uuid().v4(),
+                          title: title,
+                          subtitle: subTitle,
+                          completed: false)));
+                  Navigator.of(context).pop();
                 },
                 isEnabled: true),
           ],

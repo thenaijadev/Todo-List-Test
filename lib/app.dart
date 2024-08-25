@@ -10,6 +10,9 @@ import 'package:todo_list_test/features/auth/bloc/auth_bloc.dart';
 import 'package:todo_list_test/features/auth/data/providers/auth_provider.dart';
 import 'package:todo_list_test/features/auth/data/providers/local_provider.dart';
 import 'package:todo_list_test/features/auth/data/repositories/auth_repo.dart';
+import 'package:todo_list_test/features/todos/bloc/todos_bloc.dart';
+import 'package:todo_list_test/features/todos/data/providers/todo_provider.dart';
+import 'package:todo_list_test/features/todos/data/repositories/todo_repositories.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -32,9 +35,18 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => AuthBloc(
-              authRepo: AuthRepository(
-                  provider: AuthProvider(),
-                  localDataSource: AuthUserLocalDataSourceImpl())),
+            authRepo: AuthRepository(
+              provider: AuthProvider(),
+              localDataSource: AuthUserLocalDataSourceImpl(),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => TodosBloc(
+            todosRepostory: TodoRepository(
+              provider: TodoProvider(),
+            ),
+          ),
         ),
       ],
       child: GestureDetector(

@@ -17,11 +17,20 @@ class TodoStateAllTodosRetrieved extends TodosState {
   const TodoStateAllTodosRetrieved({
     required this.todos,
   });
+  @override
+  List<Object> get props => [todos];
 }
 
 class TodosStateError extends TodosState {
-  final TodosModel todos;
+  final TodoError error;
   const TodosStateError({
+    required this.error,
+  });
+}
+
+class TodoStateTodoCreated extends TodosState {
+  final TodosModel todos;
+  const TodoStateTodoCreated({
     required this.todos,
   });
 }
