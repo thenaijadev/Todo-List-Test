@@ -23,8 +23,8 @@ class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
           const EdgeInsets.symmetric(horizontal: 20.0).copyWith(bottom: 20),
       child: SizedBox(
         height: MediaQuery.of(context).viewInsets.bottom == 0
-            ? MediaQuery.of(context).size.height * .34
-            : MediaQuery.of(context).size.height * .7,
+            ? MediaQuery.of(context).size.height * .42
+            : MediaQuery.of(context).size.height * .8,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
@@ -59,6 +59,7 @@ class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
             SizedBox(
               height: 10.h,
             ),
+            const Spacer(),
             PrimaryButton(
                 label: "Edit task",
                 onPressed: () {

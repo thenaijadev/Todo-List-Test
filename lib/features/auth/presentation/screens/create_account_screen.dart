@@ -92,185 +92,178 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 20)
-                        .copyWith(top: 0),
-                    child: TextWidget(
-                        textAlign: TextAlign.center,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20)
+                          .copyWith(top: 0),
+                  child: TextWidget(
+                      textAlign: TextAlign.center,
+                      color: Theme.of(context).colorScheme.secondary,
+                      text:
+                          "Please complete all information to create your account on todo_list_test."),
+                ),
+                InputFieldWidget(
+                    hintColor: Theme.of(context).colorScheme.inversePrimary,
+                    hintText: "User name",
+                    hintSize: 12,
+                    key: fullNameKey,
+                    validator: (val) {
+                      return Validator.validateText(val, "Full name");
+                    },
+                    enabledBorderRadius: 10,
+                    onChanged: (val) {
+                      setState(() {
+                        fullName = val;
+                      });
+                    }),
+                InputFieldWidget(
+                    hintSize: 12,
+                    hintColor: Theme.of(context).colorScheme.inversePrimary,
+                    hintText: "Email Address",
+                    key: emailKey,
+                    enabledBorderRadius: 10,
+                    validator: (val) {
+                      return Validator.validateEmail(
+                        val,
+                      );
+                    },
+                    onChanged: (val) {
+                      setState(() {
+                        email = val;
+                      });
+                    }),
+                InputFieldWidget(
+                    hintColor: Theme.of(context).colorScheme.inversePrimary,
+                    hintText: "Password",
+                    obscureText: !obscureText,
+                    hintSize: 12,
+                    key: passwordKey,
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                      child: Icon(
+                        size: 17,
+                        obscureText
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
                         color: Theme.of(context).colorScheme.secondary,
-                        text:
-                            "Please complete all information to create your account on todo_list_test."),
-                  ),
-                  InputFieldWidget(
-                      hintColor: Theme.of(context).colorScheme.inversePrimary,
-                      hintText: "User name",
-                      hintSize: 12,
-                      key: fullNameKey,
-                      validator: (val) {
-                        return Validator.validateText(val, "Full name");
-                      },
-                      enabledBorderRadius: 10,
-                      onChanged: (val) {
-                        setState(() {
-                          fullName = val;
-                        });
-                      }),
-                  InputFieldWidget(
-                      hintSize: 12,
-                      hintColor: Theme.of(context).colorScheme.inversePrimary,
-                      hintText: "Email Address",
-                      key: emailKey,
-                      enabledBorderRadius: 10,
-                      validator: (val) {
-                        return Validator.validateEmail(
-                          val,
-                        );
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          email = val;
-                        });
-                      }),
-                  InputFieldWidget(
-                      hintColor: Theme.of(context).colorScheme.inversePrimary,
-                      hintText: "Password",
-                      obscureText: !obscureText,
-                      hintSize: 12,
-                      key: passwordKey,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            obscureText = !obscureText;
-                          });
-                        },
-                        child: Icon(
-                          size: 17,
-                          obscureText
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
                       ),
-                      enabledBorderRadius: 10,
-                      validator: (val) {
-                        final passwordIsValid = Validator.validatePassword(val);
-                        return passwordIsValid;
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          password = val;
-                          passwordKey.currentState?.validate();
-                        });
-                      }),
-                  const SizedBox(
-                    height: 100,
-                  ),
-                  Row(
-                    children: [
-                      Transform.scale(
-                        scale: 0.8,
-                        child: Checkbox(
-                            value: acceptTerms,
-                            // activeColor: Theme.of(context).colorScheme.secondary,
-                            side: BorderSide(
-                                color: Theme.of(context).colorScheme.secondary),
-                            onChanged: (val) {
-                              setState(() {
-                                acceptTerms = val ?? false;
-                              });
-                            }),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'I Agree to the ',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontFamily: "satoshi",
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Terms of Use',
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontFamily: "satoshi",
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: ' and ',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontFamily: "satoshi",
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Privacy Policy',
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontFamily: "satoshi",
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  BlocConsumer<AuthBloc, AuthState>(
-                    listener: (context, state) {
-                      if (state is AuthStateError) {
-                        InfoSnackBar.showErrorSnackBar(
-                            context, state.error.errorMessage);
-                      }
-                      if (state is AuthStateUserIsRegistered) {
-                        Navigator.of(context).pushReplacementNamed(
-                            Routes.todoList,
-                            arguments: state.user);
-                      }
+                    ),
+                    enabledBorderRadius: 10,
+                    validator: (val) {
+                      final passwordIsValid = Validator.validatePassword(val);
+                      return passwordIsValid;
                     },
-                    builder: (context, state) {
-                      return state is AuthStateIsLoading
-                          ? const LoadingWidget()
-                          : PrimaryButton(
-                              label: "Continue",
-                              onPressed: () {
-                                user = UserData(
-                                  password: password ?? "",
-                                  email: email ?? "",
-                                  userName: fullName ?? "",
-                                );
+                    onChanged: (val) {
+                      setState(() {
+                        password = val;
+                        passwordKey.currentState?.validate();
+                      });
+                    }),
+                Row(
+                  children: [
+                    Transform.scale(
+                      scale: 0.8,
+                      child: Checkbox(
+                          value: acceptTerms,
+                          // activeColor: Theme.of(context).colorScheme.secondary,
+                          side: BorderSide(
+                              color: Theme.of(context).colorScheme.secondary),
+                          onChanged: (val) {
+                            setState(() {
+                              acceptTerms = val ?? false;
+                            });
+                          }),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'I Agree to the ',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: "satoshi",
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Terms of Use',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontFamily: "satoshi",
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: ' and ',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: "satoshi",
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontFamily: "satoshi",
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                BlocConsumer<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state is AuthStateError) {
+                      InfoSnackBar.showErrorSnackBar(
+                          context, state.error.errorMessage);
+                    }
+                    if (state is AuthStateUserIsRegistered) {
+                      Navigator.of(context).pushReplacementNamed(
+                          Routes.todoList,
+                          arguments: state.user);
+                    }
+                  },
+                  builder: (context, state) {
+                    return state is AuthStateIsLoading
+                        ? const LoadingWidget()
+                        : PrimaryButton(
+                            label: "Continue",
+                            onPressed: () {
+                              user = UserData(
+                                password: password ?? "",
+                                email: email ?? "",
+                                userName: fullName ?? "",
+                              );
 
-                                if (!acceptTerms) {
-                                  InfoSnackBar.showErrorSnackBar(context,
-                                      "You have to accept the Terms of Use and Privacy Policy to proceed.");
-                                }
-                                final bool isValid =
-                                    formKey.currentState?.validate() ?? false;
-                                if (isValid && acceptTerms) {
-                                  context.read<AuthBloc>().add(
-                                      AuthEventRegisterUser(userData: user!));
-                                }
-                              },
-                              isEnabled: true);
-                    },
-                  )
-                ],
-              ),
+                              if (!acceptTerms) {
+                                InfoSnackBar.showErrorSnackBar(context,
+                                    "You have to accept the Terms of Use and Privacy Policy to proceed.");
+                              }
+                              final bool isValid =
+                                  formKey.currentState?.validate() ?? false;
+                              if (isValid && acceptTerms) {
+                                context.read<AuthBloc>().add(
+                                    AuthEventRegisterUser(userData: user!));
+                              }
+                            },
+                            isEnabled: true);
+                  },
+                )
+              ],
             ),
           ),
         ),
