@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:todo_list_test/core/utils/logger.dart';
 import 'package:todo_list_test/core/widgets/input_field_widget.dart';
 import 'package:todo_list_test/core/widgets/primary_button.dart';
 import 'package:todo_list_test/core/widgets/text_widget.dart';
@@ -31,6 +30,9 @@ class _CreateTodoBottomSheetWidgetState
 
   String title = "";
   String subTitle = "";
+  bool isValidTitle = true;
+
+  bool isValidSubtitle = true;
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +65,15 @@ class _CreateTodoBottomSheetWidgetState
                 onChanged: (val) {
                   setState(() {
                     title = val ?? "";
+                    isValidTitle = title.trim() != "";
                   });
                 }),
+            if (!isValidTitle)
+              const TextWidget(
+                text: "Title field is required",
+                fontSize: 12,
+                color: Colors.red,
+              ),
             SizedBox(
               height: 10.h,
             ),
@@ -76,8 +85,17 @@ class _CreateTodoBottomSheetWidgetState
                 maxLines: 3,
                 enabledBorderRadius: 10,
                 onChanged: (val) {
-                  subTitle = val ?? "";
+                  setState(() {
+                    subTitle = val ?? "";
+                    isValidSubtitle = subTitle.trim() != "";
+                  });
                 }),
+            if (!isValidSubtitle)
+              const TextWidget(
+                text: "Details field is required",
+                fontSize: 12,
+                color: Colors.red,
+              ),
             SizedBox(
               height: 10.h,
             ),
@@ -85,14 +103,23 @@ class _CreateTodoBottomSheetWidgetState
             PrimaryButton(
                 label: "Create task",
                 onPressed: () {
-                  logger.e([title, subTitle]);
-                  context.read<TodosBloc>().add(TodoEventCreateTodo(
-                      todo: Todo(
-                          id: const Uuid().v4(),
-                          title: title,
-                          subtitle: subTitle,
-                          completed: false)));
-                  Navigator.of(context).pop();
+                  if (title.trim() == "") {
+                    setState(() {
+                      isValidTitle = false;
+                    });
+                  } else if (subTitle.trim() == "") {
+                    setState(() {
+                      isValidSubtitle = false;
+                    });
+                  } else {
+                    context.read<TodosBloc>().add(TodoEventCreateTodo(
+                        todo: Todo(
+                            id: const Uuid().v4(),
+                            title: title,
+                            subtitle: subTitle,
+                            completed: false)));
+                    Navigator.of(context).pop();
+                  }
                 },
                 isEnabled: true),
           ],

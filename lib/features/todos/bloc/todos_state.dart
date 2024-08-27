@@ -27,10 +27,3 @@ class TodosStateError extends TodosState {
     required this.error,
   });
 }
-
-class TodoStateTodoCreated extends TodosState {
-  final TodosModel todos;
-  const TodoStateTodoCreated({
-    required this.todos,
-  });
-}

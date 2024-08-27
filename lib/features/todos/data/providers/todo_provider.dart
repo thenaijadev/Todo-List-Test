@@ -14,7 +14,6 @@ class TodoProvider {
           },
         ),
       );
-
       return response;
     } catch (e) {
       rethrow;

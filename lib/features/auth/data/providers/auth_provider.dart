@@ -2,8 +2,6 @@ import 'package:cross_file/src/types/interface.dart';
 import 'package:dio/dio.dart';
 import 'package:todo_list_test/core/network/api_endpoint.dart';
 import 'package:todo_list_test/core/network/dio_client.dart';
-import 'package:todo_list_test/features/auth/data/models/auth_user.dart';
-import 'package:todo_list_test/features/auth/data/providers/local_provider.dart';
 
 class AuthProvider {
   Future<Map<String, dynamic>> registerUser({

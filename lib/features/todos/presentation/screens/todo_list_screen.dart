@@ -256,7 +256,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
 void showPopup({required BuildContext context, required Widget widget}) {
   showDialog(
     context: context,
-    builder: (BuildContext context) => WhitePopup(
+    builder: (BuildContext context) => BrownPopup(
       child: widget,
     ),
   );

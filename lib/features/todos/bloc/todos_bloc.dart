@@ -12,45 +12,50 @@ part 'todos_state.dart';
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodoRepository todosRepostory;
   TodosBloc({required this.todosRepostory}) : super(TodosInitial()) {
-    on<TodoEventGetTodos>((event, emit) async {
-      emit(TodoStateIsLoading());
-      if (await LocalTodoListProvider().getTodos() != null) {
-        final todos = await LocalTodoListProvider().getTodos();
-        emit(TodoStateAllTodosRetrieved(todos: todos!));
-      } else {
-        final response = await todosRepostory.getTodos();
+    on<TodoEventGetTodos>(_getTodos);
 
-        var todos = await LocalTodoListProvider().getTodos();
+    on<TodoEventCreateTodo>(_createTodo);
 
-        response.fold((l) => emit(TodosStateError(error: l)),
-            (r) => emit(TodoStateAllTodosRetrieved(todos: todos!)));
-      }
-    });
+    on<TodoEventUpdateTodo>(_updateTodo);
 
-    on<TodoEventCreateTodo>((event, emit) async {
-      emit(TodoStateIsLoading());
+    on<TodoEventDeleteTodo>(_deleteTodo);
+  }
 
-      final response = await todosRepostory.createTodo(
-          title: event.todo.title ?? "",
-          subtitle: event.todo.subtitle ?? "",
-          isCompleted: event.todo.completed ?? false);
-
+  _getTodos(event, emit) async {
+    emit(TodoStateIsLoading());
+    if (await LocalTodoListProvider().getTodos() != null) {
+      final todos = await LocalTodoListProvider().getTodos();
+      emit(TodoStateAllTodosRetrieved(todos: todos!));
+    } else {
+      final response = await todosRepostory.getTodos();
+      var todos = await LocalTodoListProvider().getTodos();
       response.fold((l) => emit(TodosStateError(error: l)),
-          (r) => emit(TodoStateAllTodosRetrieved(todos: r)));
-    });
+          (r) => emit(TodoStateAllTodosRetrieved(todos: todos!)));
+    }
+  }
 
-    on<TodoEventUpdateTodo>((event, emit) async {
-      emit(TodoStateIsLoading());
-      final res = await todosRepostory.updateTodo(todo: event.todo);
-      res.fold((l) => emit(TodosStateError(error: l)),
-          (r) => emit(TodoStateAllTodosRetrieved(todos: r)));
-    });
+  _createTodo(event, emit) async {
+    emit(TodoStateIsLoading());
 
-    on<TodoEventDeleteTodo>((event, emit) async {
-      emit(TodoStateIsLoading());
-      final res = await todosRepostory.deleteTodo(todo: event.todo);
-      res.fold((l) => emit(TodosStateError(error: l)),
-          (r) => emit(TodoStateAllTodosRetrieved(todos: r)));
-    });
+    final response = await todosRepostory.createTodo(
+        title: event.todo.title ?? "",
+        subtitle: event.todo.subtitle ?? "",
+        isCompleted: event.todo.completed ?? false);
+    response.fold((l) => emit(TodosStateError(error: l)),
+        (r) => emit(TodoStateAllTodosRetrieved(todos: r)));
+  }
+
+  _updateTodo(event, emit) async {
+    emit(TodoStateIsLoading());
+    final res = await todosRepostory.updateTodo(todo: event.todo);
+    res.fold((l) => emit(TodosStateError(error: l)),
+        (r) => emit(TodoStateAllTodosRetrieved(todos: r)));
+  }
+
+  _deleteTodo(event, emit) async {
+    emit(TodoStateIsLoading());
+    final res = await todosRepostory.deleteTodo(todo: event.todo);
+    res.fold((l) => emit(TodosStateError(error: l)),
+        (r) => emit(TodoStateAllTodosRetrieved(todos: r)));
   }
 }

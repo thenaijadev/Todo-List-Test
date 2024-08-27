@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WhitePopup extends StatelessWidget {
-  const WhitePopup({super.key, required this.child});
+class BrownPopup extends StatelessWidget {
+  const BrownPopup({super.key, required this.child});
   final Widget child;
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class WhitePopup extends StatelessWidget {
 void showWhitePopup({required BuildContext context, required Widget widget}) {
   showDialog(
     context: context,
-    builder: (BuildContext context) => WhitePopup(
+    builder: (BuildContext context) => BrownPopup(
       child: widget,
     ),
   );

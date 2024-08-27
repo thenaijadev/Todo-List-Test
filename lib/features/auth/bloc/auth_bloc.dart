@@ -11,33 +11,37 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepo;
   AuthBloc({required this.authRepo}) : super(AuthInitial()) {
-    on<AuthEventRegisterUser>((event, emit) async {
-      emit(AuthStateIsLoading());
-      final response = await authRepo.registerUser(
-        userName: event.userData.userName ?? "",
-        email: event.userData.email ?? "",
-        password: event.userData.password ?? "",
-      );
+    on<AuthEventRegisterUser>(_register);
 
-      response.fold((l) => emit(AuthStateError(error: l)), (r) {
-        emit(
-          AuthStateUserIsRegistered(userData: event.userData, user: r),
-        );
-      });
+    on<AuthEventLoginUser>(_login);
+  }
+
+  _register(event, emit) async {
+    emit(AuthStateIsLoading());
+    final response = await authRepo.registerUser(
+      userName: event.userData.userName ?? "",
+      email: event.userData.email ?? "",
+      password: event.userData.password ?? "",
+    );
+
+    response.fold((l) => emit(AuthStateError(error: l)), (r) {
+      emit(
+        AuthStateUserIsRegistered(userData: event.userData, user: r),
+      );
     });
+  }
 
-    on<AuthEventLoginUser>((event, emit) async {
-      emit(AuthStateIsLoading());
-      final response = await authRepo.login(
-        email: event.userData.email!,
-        password: event.userData.password!,
+  _login(event, emit) async {
+    emit(AuthStateIsLoading());
+    final response = await authRepo.login(
+      email: event.userData.email!,
+      password: event.userData.password!,
+    );
+
+    response.fold((l) => emit(AuthStateError(error: l)), (r) {
+      emit(
+        AuthStateIsLoggedIn(userData: event.userData, user: r),
       );
-
-      response.fold((l) => emit(AuthStateError(error: l)), (r) {
-        emit(
-          AuthStateIsLoggedIn(userData: event.userData, user: r),
-        );
-      });
     });
   }
 }

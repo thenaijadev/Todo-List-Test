@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todo_list_test/core/widgets/input_field_widget.dart';
 import 'package:todo_list_test/core/widgets/primary_button.dart';
-import 'package:todo_list_test/core/widgets/snackbar.dart';
 import 'package:todo_list_test/core/widgets/text_widget.dart';
 import 'package:todo_list_test/features/todos/bloc/todos_bloc.dart';
 import 'package:todo_list_test/features/todos/data/models/todo.dart';
@@ -19,7 +18,9 @@ class EditTodoBottomSheetWidget extends StatefulWidget {
 class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
   late TextEditingController titleController;
   late TextEditingController subTitleController;
+  bool isValidTitle = true;
 
+  bool isValidSubtitle = true;
   @override
   void initState() {
     titleController = TextEditingController(text: widget.todo.title);
@@ -77,11 +78,14 @@ class _EditTodoBottomSheetWidgetState extends State<EditTodoBottomSheetWidget> {
             PrimaryButton(
                 label: "Edit task",
                 onPressed: () {
-                  if (titleController.text == "" ||
-                      subTitleController.text == "") {
-                    InfoSnackBar.showErrorSnackBar(
-                        context, "Both fields are required");
-                    Navigator.pop(context);
+                  if (titleController.text.trim() == "") {
+                    setState(() {
+                      isValidTitle = false;
+                    });
+                  } else if (subTitleController.text.trim() == "") {
+                    setState(() {
+                      isValidSubtitle = false;
+                    });
                   } else {
                     context.read<TodosBloc>().add(
                           TodoEventUpdateTodo(

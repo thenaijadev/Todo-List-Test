@@ -20,13 +20,11 @@ class TodoRepository {
   Future<EitherFutureTodoErrorOrTodoModel> getTodos() async {
     try {
       final response = await provider.getTodos();
-      logger.f(response);
+
       await LocalTodoListProvider().saveTodos(TodosModel.fromJson(response));
 
       return right(TodosModel.fromJson(response));
     } on DioException catch (e) {
-      logger.f(e.response);
-
       return left(
         TodoError(
           errorMessage: json.decode(e.response.toString())["message"],
@@ -46,9 +44,9 @@ class TodoRepository {
       required String subtitle,
       required bool isCompleted}) async {
     try {
-      final response = await provider.createTodo(
+      await provider.createTodo(
           title: title, subtitle: subtitle, isCompleted: isCompleted);
-      logger.f(response);
+
       final localTodos = await LocalTodoListProvider().getTodos();
       localTodos?.data.add(Todo(
           id: const Uuid().v4(),
@@ -59,8 +57,6 @@ class TodoRepository {
 
       return right(localTodos);
     } on DioException catch (e) {
-      logger.f(e.response);
-
       return left(
         TodoError(
           errorMessage: json.decode(e.response.toString())["message"],
