@@ -1,4 +1,3 @@
-import 'package:cross_file/src/types/interface.dart';
 import 'package:dio/dio.dart';
 import 'package:todo_list_test/core/network/api_endpoint.dart';
 import 'package:todo_list_test/core/network/dio_client.dart';
@@ -53,15 +52,4 @@ class AuthProvider {
       rethrow;
     }
   }
-
-  updateUser(
-      {required String authToken,
-      required String dateOfBirth,
-      required String gender,
-      required String location,
-      required XFile image}) {}
-
-  requestOtp({required String email}) {}
-
-  verifyOtp({required String email, required String otp}) {}
 }
